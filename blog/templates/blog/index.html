@@ -1,0 +1,91 @@
+{# 继承html页面的模板 #}
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block title %}博客首页{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                {# 开始循环每一个博客 #}
+                {% for entry in entry_list %}
+                    <hr />
+                    {# 文章的标题,点击标跳转链接 #}
+                    <h2><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a></h2>
+                    {# 显示文章的配图,因为有的文章没有配图,因此需要进行判断 #}
+                    {% if entry.img %}
+                        {# 显示图片,entry.img.url 把图片的url返回给前端,然后进行展示 #}
+                        <div><img src="{{ entry.img.url }}" alt="博客配图" width="50%"></div>
+                    {% endif %}
+
+                    {# 显示文章的摘要 #}
+                    {% if entry.abstract %}
+                        <p>{{ entry.abstract }}</p>
+                    {# 文章有摘要的话,就显示摘要,没有摘要的话,就截取文章内容的前128个字符作为摘要显示 #}
+                    {% else %}
+                        <p>{{ entry.body | truncatechars:128 }}</p>
+                    {% endif %}
+                    {# 作者 #}
+                    <p>
+                        <span>作者: {{ entry.author }}</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;发表时间: {{ entry.created_time }}</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;浏览量: {{ entry.visiting }}</span>
+                    </p>
+                {% endfor %}
+
+                <hr />
+
+                <!--分页功能-->
+                <div id="paginator" class="pull-right">
+                    <ul class="pagination">
+                        {%  if entry_list.has_previous %}
+                            <li><a href="?page={{ entry_list.previous_page_number }}"><i class="glyphicon glyphicon-chevron-left"></i>前一页</a></li>
+                        {% endif %}
+
+                        {% if first %}
+                            <li><a href="?page=1">1</a></li>
+                        {% endif %}
+
+                        {% if left %}
+                            {% if left_has_more %}
+                                <span>...</span>
+                            {% endif %}
+
+                            {% for i in left %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+
+
+                        <li class="active"><a href="?page={{ entry_list.number }}">{{ entry_list.number }}</a></li>
+
+                        {% if right %}
+                            {% for i in right %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endfor %}
+
+                            {% if right_has_more %}
+                                <span>...</span>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if last %}
+                            <li><a href="?page={{ entry_list.num_pages }}">{{ entry_list.num_pages }}</a></li>
+                        {% endif %}
+
+                        {% if entry_list.has_next %}
+                            <li><a href="?page={{ entry_list.next_page_number }}">下一页<i class="glyphicon glyphicon-chevron-right"></i></a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+            </div>
+            {# 侧边栏 #}
+            <div class="col-md-3">
+                {# 引入侧边栏的html代码 #}
+                {% include 'blog/right_side_bar.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
