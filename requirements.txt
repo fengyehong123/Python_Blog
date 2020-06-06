@@ -1,6 +1,6 @@
 certifi==2019.9.11
 chardet==3.0.4
-Django==1.11.7
+Django==1.11.29
 django-contrib-comments==1.9.1
 idna==2.8
 Markdown==3.1.1
