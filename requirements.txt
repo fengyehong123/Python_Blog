@@ -4,7 +4,7 @@ Django==1.11.7
 django-contrib-comments==1.9.1
 idna==2.8
 Markdown==3.1.1
-Pillow==6.2.1
+Pillow==9.0.0
 Pygments==2.4.2
 PyMySQL==0.9.3
 pytz==2019.3
